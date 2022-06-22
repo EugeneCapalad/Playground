@@ -5,6 +5,7 @@
             type="text"
             placeholder="Add Task"
             v-model="taskName"
+            @keyup.enter="addNewTask"
         >
         <button 
             @click="addNewTask"
@@ -14,12 +15,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@vue/runtime-core";
+import { defineComponent, ref, reactive } from "@vue/runtime-core";
+import moment from 'moment'
 
 export default defineComponent({
     props: {
         latestId: {
-            required: true,
+            required: false,
             type: Number
         }
     },
@@ -28,13 +30,23 @@ export default defineComponent({
         const taskName = ref('' as string)
 
         function addNewTask() {
-            let newTask = {
+            let newTask = reactive({
                 id: props.latestId,
                 taskName,
+                dateCreated: moment().format('YYYY-MM-DD'),
                 status: 1
-            }
+            })
 
             emit('addNewTask', newTask)
+
+            taskName.value = ''
+            newTask = reactive({
+                id: 0,
+                taskName: '',
+                dateCreated: '',
+                status: 0
+            })
+            
 
 
         }

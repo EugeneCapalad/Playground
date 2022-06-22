@@ -11,3 +11,8 @@ export interface TaskType {
     dateCreated: string,
     status: number
 }
+
+export interface ModifyTask {
+    status: number
+    id: number,
+}
