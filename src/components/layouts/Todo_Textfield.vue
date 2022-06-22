@@ -4,8 +4,10 @@
             class="w-full px-5 py-3 box-border inputBorder rounded-md text-lg"
             type="text"
             placeholder="Add Task"
+            v-model="taskName"
         >
         <button 
+            @click="addNewTask"
             class="w-24 bg-disabled box-border add-btn font-bold"
         >ADD</button>
     </div>
@@ -15,11 +17,32 @@
 import { defineComponent, ref } from "@vue/runtime-core";
 
 export default defineComponent({
-    setup(){
+    props: {
+        latestId: {
+            required: true,
+            type: Number
+        }
+    },
+    setup(props, { emit }){
         const disableAddBtn = ref(true as boolean)
+        const taskName = ref('' as string)
+
+        function addNewTask() {
+            let newTask = {
+                id: props.latestId,
+                taskName,
+                status: 1
+            }
+
+            emit('addNewTask', newTask)
+
+
+        }
 
         return {
-            disableAddBtn
+            disableAddBtn,
+            addNewTask,
+            taskName,
         }
     }
 })

@@ -23,7 +23,7 @@ export default defineComponent ({
         }
     },
 
-    setup( props,  {  emit } ){
+    setup( props, { emit } ){
         // const details = { ...props.appDetails }
 
         function getImage() {
