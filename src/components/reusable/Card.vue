@@ -1,7 +1,7 @@
 <template>
     <div 
         @click="clicked()"
-        class="flex-1 shrink card rounded-lg w-72 overflow-hidden cursor-pointer"
+        class="flex-1 shrink-0 card rounded-lg w-72 overflow-hidden cursor-pointer"
     >
         <div>
             <img draggable="false" :src="getImage()" class="object-contain h-72 w-full">

@@ -1,7 +1,7 @@
 <template>
-    <div 
-        v-if="task.status != 0"
-        class="px-5 py-4 rounded-md flex  gap-x-5 todo-card"
+    <div
+        class="px-5 py-4 rounded-md flex  gap-x-5 todo-card select-none cursor-pointer"
+        @dblclick="editMode = true"
     >
         <div :class="`w-1.5 ${getStatus()}`">
             <!-- line -->
@@ -9,16 +9,29 @@
         <div class="flex-1 flex items-center task">
             <div class="flex-1">
                 <p class="text-gray-400 text-sm">{{ getDate() }}</p>
-                <p class="font-medium text-xl">{{ task.taskName }}</p>
+                <p 
+                    v-if="editMode == false"
+                    class="font-medium text-xl w-full"
+                >{{ task.taskName }}</p>
+
+                <input 
+                    v-else
+                    type="text"
+                    class="input-outline px-2 py-1 w-4/5 rounded-sm"
+                    @keyup.enter=""
+                    @blur="editMode = false"
+                    v-model="newTaskName"
+                    autofocus
+                >
             </div>
 
             <div class="w-20 h-2/3 flex gap-x-4"> <!--Button Container-->
                 <div 
-                    @click="modifyTask('finish')"
+                    @click="modifyTask(task.status == 1 ? 'finish' : 'on-going')"
                     class="w-1/2 flex justify-center items-center rounded-full fab-btn p-0.5 cursor-pointer"
                 >
                     <div class="bg-gray-100 w-full h-full rounded-full flex justify-center items-center">
-                            <span class="mdi mdi-check-bold text-primary text-xl"></span>
+                            <span :class="`mdi ${task.status == 2 ? 'mdi-drag-horizontal-variant text-gray-500' : 'mdi-check-bold text-primary'}  text-xl`"></span>
                     </div>
                 </div>
                 <div 
@@ -35,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent, ref } from "@vue/runtime-core";
 import moment from 'moment'
 
 export default defineComponent({
@@ -47,6 +60,9 @@ export default defineComponent({
     },
 
     setup( props, { emit } ) {
+        const editMode = ref(false as boolean)
+        const newTaskName = ref('' as string)
+
         function getStatus() {
             if(props.task.status == 0) return 'bg-red-500'
             else if(props.task.status == 1) return 'bg-gray-400'
@@ -57,29 +73,28 @@ export default defineComponent({
             return moment(props.task.dateCreated).format('MMMM D, YYYY')
         }
 
-        function finishTask() {
-            emit('finishTask', props.task.id)
-        }
-
-        function deleteTask() {
-            emit('deleteTask', props.task.id)
-        }
-
         function modifyTask(method: string){
             let toEmit = {
-                status: method === 'finish' ? 2 : 0,
+                status: method === 'finish' ? 2 : method === 'on-going' ? 1 : 0,
                 id: props.task.id
             }
 
             emit('modifyTask', toEmit)
         }
 
+        // function updateTaskName() {
+        //     console.log('asdqwe', props)
+        // }
+
         return {
             getStatus,
             getDate,
             // finishTask,
             // deleteTask,
-            modifyTask
+            modifyTask,
+            editMode,
+            // updateTaskName,
+            newTaskName
         }
     }
 })
@@ -106,5 +121,9 @@ export default defineComponent({
 
     .task:hover .fab-btn{
         opacity: 1;
+    }
+
+    .input-outline {
+        outline: 1px solid black;
     }
 </style>

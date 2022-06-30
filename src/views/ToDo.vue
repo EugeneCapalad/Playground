@@ -2,13 +2,13 @@
     <section class="h-full w-full">
         <div class="mx-auto h-full w-2/4 borderThis px-8 py-4">
             <Textfield :latestId="latestId" @addNewTask="addNewTask"></Textfield>
-            <div class="mt-8">
-                <div class="flex legendContainer mb-3">
+            <div class="mt-6">
+                <div class="flex legendContainer mb-1">
                     <div class=" flex gap-x-2">
                         <div 
                             v-for="legend in legends"
                             :key="legend.id"
-                            :class="`flex items-center gap-x-1 px-2 py-1 cursor-pointer select-none ${filterType == legend.id ? 'bg-gray-200 rounded' : ''}`"
+                            :class="`flex items-center gap-x-1 px-2 py-1 cursor-pointer select-none ${filterType == legend.id ? 'bg-gray-200 rounded-sm' : ''}`"
                             @click="filterTask(legend.id)"
                         >
                             <div :class="`w-3 h-3 bg-${legend.color}`"></div>

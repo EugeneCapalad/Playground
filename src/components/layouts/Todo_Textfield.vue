@@ -30,25 +30,24 @@ export default defineComponent({
         const taskName = ref('' as string)
 
         function addNewTask() {
-            let newTask = reactive({
-                id: props.latestId,
-                taskName,
-                dateCreated: moment().format('YYYY-MM-DD'),
-                status: 1
-            })
+            if(taskName.value.trim() != '') {
+                let newTask = reactive({
+                    id: props.latestId,
+                    taskName,
+                    dateCreated: moment().format('YYYY-MM-DD'),
+                    status: 1
+                })
 
-            emit('addNewTask', newTask)
+                emit('addNewTask', newTask)
 
-            taskName.value = ''
-            newTask = reactive({
-                id: 0,
-                taskName: '',
-                dateCreated: '',
-                status: 0
-            })
-            
-
-
+                taskName.value = ''
+                newTask = reactive({
+                    id: 0,
+                    taskName: '',
+                    dateCreated: '',
+                    status: 0
+                })
+            }
         }
 
         return {
